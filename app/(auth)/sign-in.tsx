@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 
 const SignIn = () => {
   return (
-    <View>
+    <View className='flex-1 bg-black'>
       <Text>SignIn</Text>
       <TouchableOpacity onPress={() => router.replace('/(tabs)/transactions')}>
         <Text>Transactions</Text>
