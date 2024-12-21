@@ -6,6 +6,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Entypo from '@expo/vector-icons/Entypo';
+import { useTransactionStore } from '@/store';
+import { formatDate } from '@/lib/util';
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -14,18 +16,7 @@ interface TransactionItemProps {
 
 const TransactionItem: React.FC<TransactionItemProps> = (props) => {
   const { transaction, displayAmount } = props;
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    };
-
-    return date.toLocaleDateString('en-GB', options);
-  };
+  const { setSelectedTransaction } = useTransactionStore();
 
   const renderIcon = (transferMethod: TransferMethod) => {
     switch (transferMethod) {
@@ -46,10 +37,13 @@ const TransactionItem: React.FC<TransactionItemProps> = (props) => {
     }
   };
 
+  const handleOnPress = () => {
+    setSelectedTransaction(transaction);
+    router.push(`/transaction/${transaction.id}`);
+  };
+
   return (
-    <TouchableOpacity
-      onPress={() => router.push(`/transaction/${transaction.id}`)}
-    >
+    <TouchableOpacity onPress={handleOnPress}>
       <View className='flex flex-row justify-between items-center mt-5'>
         <View className='flex flex-row items-center'>
           <View className='bg-secondary w-[40px] h-[40px] rounded-xl flex justify-center items-center'>
@@ -72,7 +66,7 @@ const TransactionItem: React.FC<TransactionItemProps> = (props) => {
               {transaction.amount}
             </Text>
           ) : (
-            <Entypo name="dots-three-horizontal" size={24} color="white" />
+            <Entypo name='dots-three-horizontal' size={24} color='white' />
           )}
         </View>
       </View>
