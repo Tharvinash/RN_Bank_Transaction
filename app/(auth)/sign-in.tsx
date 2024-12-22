@@ -25,10 +25,10 @@ const SignIn = () => {
         </Text>
       </View>
 
-      <View className='flex items-center justify-center w-full my-10'>
+      <View className='flex items-center justify-center w-full h-auto my-10'>
         <Image
           source={require('../../assets/images/signIn.png')}
-          resizeMode='contain'
+          resizeMode='cover'
         />
       </View>
 

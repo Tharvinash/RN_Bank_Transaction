@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Alert } from 'react-native';
 
 export const fetchAPI = async (url: string, options?: RequestInit) => {
   try {
@@ -8,6 +9,7 @@ export const fetchAPI = async (url: string, options?: RequestInit) => {
     }
     return await response.json();
   } catch (error) {
+    Alert.alert('API Error', 'Unable to retrive data.');
     console.error('Fetch error:', error);
     throw error;
   }
