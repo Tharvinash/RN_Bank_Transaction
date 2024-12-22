@@ -6,8 +6,9 @@ import {
   View,
   ScrollView,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { fetchAPI, useFetch } from '@/lib/fetch';
 import { Transaction } from '@/types/transaction';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -22,12 +23,10 @@ const Transactions = () => {
   const [displayAmount, setDisplayAmount] = useState(false);
   const swiperRef = useRef<Swiper>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [cardIndex, setCardIndex] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const {
-    data: cards,
-    loading: cardsLoading,
-    error: cardsError,
-  } = useFetch<Card[]>('/(api)/cards');
+  const { data: cards } = useFetch<Card[]>('/(api)/cards');
 
   const handleDisplayAmount = async () => {
     if (!displayAmount) {
@@ -49,7 +48,17 @@ const Transactions = () => {
     }
   };
 
+  const onRefresh = () => {
+    setRefreshing(true);
+
+    cards &&
+      loadTransaction(cards[cardIndex].id).then(() => {
+        setRefreshing(false);
+      });
+  };
+
   const handleCardChange = (index: number) => {
+    setCardIndex(index);
     cards && loadTransaction(cards[index].id);
   };
 
@@ -57,9 +66,33 @@ const Transactions = () => {
     cards && loadTransaction(cards[0].id);
   }, [cards]);
 
+  const renderItem = useCallback(
+    ({ item: transaction }: { item: Transaction }) => (
+      <TransactionItem
+        transaction={transaction}
+        displayAmount={displayAmount}
+      />
+    ),
+    []
+  );
+
+  const keyExtractor = useCallback(
+    (transaction: Transaction) => transaction.id,
+    []
+  );
+
   return (
     <SafeAreaView className='flex-1 bg-primary p-5'>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#2567f9']}
+          />
+        }
+      >
         <Header />
 
         <View className='flex flex-row mt-10'>
@@ -131,10 +164,8 @@ const Transactions = () => {
           nestedScrollEnabled={true}
           scrollEnabled={false}
           data={transactions}
-          renderItem={({ item }) => (
-            <TransactionItem transaction={item} displayAmount={displayAmount} />
-          )}
-          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
         />
       </ScrollView>
     </SafeAreaView>

@@ -13,6 +13,7 @@ export async function GET(request: Request, { id }: { id: string }) {
     const response = await sql`
       SELECT * FROM transactions
       WHERE card_id = ${id}
+      ORDER BY transaction_date DESC
     `;
 
     return new Response(JSON.stringify({ data: response }), {
