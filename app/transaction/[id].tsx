@@ -108,7 +108,10 @@ const TransactionInfo = () => {
             <Fontisto name='arrow-swap' size={24} color='white' />
           </View>
         </View>
-        <TouchableOpacity onPress={() => router.back()} className='h-[50px] bg-primaryLight rounded-lg flex justify-center items-center'>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          className='h-[50px] bg-tertiary rounded-lg flex justify-center items-center'
+        >
           <Text className='text-white text-lg'>Done</Text>
         </TouchableOpacity>
       </View>

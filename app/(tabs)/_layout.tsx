@@ -12,13 +12,11 @@ export default function Layout() {
     <Tabs
       initialRouteName='transactions'
       screenOptions={{
-        tabBarActiveTintColor: '#ffb017',
-        tabBarInactiveTintColor: '#121433',
         tabBarStyle: {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: '#23265a',
+          backgroundColor: '#23265A',
           height: 60,
         },
       }}
@@ -32,13 +30,13 @@ export default function Layout() {
             <FontAwesome
               name='bank'
               size={24}
-              color={focused ? '#FFA001' : '#fff'}
+              color={focused ? '#2567f9' : '#fff'}
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
               style={{
-                color: focused ? '#FFA001' : '#fff',
+                color: focused ? '#2567f9' : '#fff',
                 fontSize: 12,
                 fontWeight: focused ? 'bold' : 'normal',
                 marginTop: 4,
@@ -58,13 +56,13 @@ export default function Layout() {
             <FontAwesome
               name='credit-card'
               size={24}
-              color={focused ? '#FFA001' : '#fff'}
+              color={focused ? '#2567f9' : '#fff'}
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
               style={{
-                color: focused ? '#FFA001' : '#fff',
+                color: focused ? '#2567f9' : '#fff',
                 fontSize: 12,
                 fontWeight: focused ? 'bold' : 'normal',
                 marginTop: 4,

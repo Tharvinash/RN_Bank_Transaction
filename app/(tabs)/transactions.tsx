@@ -5,9 +5,11 @@ import {
   Text,
   View,
   ScrollView,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
-import { useFetch } from '@/lib/fetch';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { fetchAPI, useFetch } from '@/lib/fetch';
 import { Transaction } from '@/types/transaction';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
@@ -20,22 +22,11 @@ import Header from '@/components/Header';
 const Transactions = () => {
   const [displayAmount, setDisplayAmount] = useState(false);
   const swiperRef = useRef<Swiper>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [cardIndex, setCardIndex] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const {
-    data: transactions,
-    loading,
-    error,
-  } = useFetch<Transaction[]>('/(api)/transaction');
-  console.log(transactions, error);
-
-  const {
-    data: cards,
-    loading: cardsLoading,
-    error: cardsError,
-  } = useFetch<Card[]>('/(api)/cards');
-
-  console.log(loading);
+  const { data: cards } = useFetch<Card[]>('/(api)/cards');
 
   const handleDisplayAmount = async () => {
     if (!displayAmount) {
@@ -48,9 +39,60 @@ const Transactions = () => {
     }
   };
 
+  const loadTransaction = async (id: string) => {
+    try {
+      const { data } = await fetchAPI(`/(api)/transaction/${id}`);
+      data && setTransactions(data);
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+
+    cards &&
+      loadTransaction(cards[cardIndex].id).then(() => {
+        setRefreshing(false);
+      });
+  };
+
+  const handleCardChange = (index: number) => {
+    setCardIndex(index);
+    cards && loadTransaction(cards[index].id);
+  };
+
+  useEffect(() => {
+    cards && loadTransaction(cards[0].id);
+  }, [cards]);
+
+  const renderItem = useCallback(
+    ({ item: transaction }: { item: Transaction }) => (
+      <TransactionItem
+        transaction={transaction}
+        displayAmount={displayAmount}
+      />
+    ),
+    []
+  );
+
+  const keyExtractor = useCallback(
+    (transaction: Transaction) => transaction.id,
+    []
+  );
+
   return (
     <SafeAreaView className='flex-1 bg-primary p-5'>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#2567f9']}
+          />
+        }
+      >
         <Header />
 
         <View className='flex flex-row mt-10'>
@@ -58,7 +100,7 @@ const Transactions = () => {
         </View>
 
         <View className='mt-5'>
-          {!!cards && (
+          {!!cards ? (
             <Swiper
               height={200}
               ref={swiperRef}
@@ -67,9 +109,9 @@ const Transactions = () => {
                 <View className='w-[32px] h-[4px] mx-1 bg-white rounded-full' />
               }
               activeDot={
-                <View className='w-[32px] h-[4px] mx-1 bg-[#2567f9] rounded-full' />
+                <View className='w-[32px] h-[4px] mx-1 bg-primaryLight rounded-full' />
               }
-              onIndexChanged={(index) => setActiveIndex(index)}
+              onIndexChanged={(index) => handleCardChange(index)}
             >
               {cards?.map((item, i) => (
                 <View key={item.id}>
@@ -91,6 +133,8 @@ const Transactions = () => {
                 </View>
               ))}
             </Swiper>
+          ) : (
+            <ActivityIndicator size='large' color='bg-secondary' />
           )}
         </View>
 
@@ -120,10 +164,8 @@ const Transactions = () => {
           nestedScrollEnabled={true}
           scrollEnabled={false}
           data={transactions}
-          renderItem={({ item }) => (
-            <TransactionItem transaction={item} displayAmount={displayAmount} />
-          )}
-          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
         />
       </ScrollView>
     </SafeAreaView>
