@@ -73,7 +73,7 @@ const Transactions = () => {
         displayAmount={displayAmount}
       />
     ),
-    []
+    [displayAmount]
   );
 
   const keyExtractor = useCallback(

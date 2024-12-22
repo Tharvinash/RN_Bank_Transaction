@@ -18,8 +18,9 @@ const Cards = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header />
 
-        <View className='flex flex-row mt-10 mb-5'>
-          <Text className='text-white text-[22px]'>Available Card</Text>
+        <View className='flex flex-col mt-10 mb-5'>
+          <Text className='text-white text-[22px]'>Card List</Text>
+          <Text className='text-[#14c1b5]'>You have {cards?.length} active cards</Text>
         </View>
 
         {cards?.map((item, i) => (

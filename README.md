@@ -1,50 +1,39 @@
-# Welcome to your Expo app 👋
+# Fintech App - Transaction History Module
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## General Information
 
-## Get started
+The **Transaction History** module is a core feature of the fintech app built using **React Native**, **TypeScript**, and **PostgreSQL (Neon DB)**. This module provides users with secure access to their transaction history, allowing them to view recent transactions, securely authenticate with fingerprint login, and display detailed information about each transaction. The app is designed with security and efficiency in mind, offering features like **masked transaction values**, **pull-to-refresh**, and **available cards** display. 
 
-1. Install dependencies
+(**User andriod device / Android emulator for better experience. Thank you** )
 
-   ```bash
-   npm install
-   ```
+### Features:
+- **Fingerprint Authentication**: Secure login using biometric data such as fingerprint.
+- **Masked Transaction Values**: The transaction amount is displayed in a masked format for enhanced security.
+- **Pull-to-Refresh**: Users can refresh the transaction history list to get the most up-to-date data.
+- **Available Cards**: Users can view a list of available cards associated with their account.
+- **Transaction Information**: Detailed information about each transaction, including the amount, date, and recipient.
+- **Error Handling**: Proper error handling for authentication, data fetching, and transaction errors.
 
-2. Start the app
+### Tech Stack:
+- **Frontend**: React Native, TypeScript
+- **Backend**: PostgreSQL (Neon DB)
+- **Authentication**: Fingerprint authentication via `expo-local-authentication`
+- **State Management**: Zustand
+- **Routing**: Expo Routing & Api Routes
+- **Styling**: NativeWind for utility-first CSS
 
-   ```bash
-    npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## Setup
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+To get started with the app, follow the steps below:
 
 ```bash
-npm run reset-project
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+npm install
+npm start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Screenshots
+![Transaction App](https://github.com/user-attachments/assets/d70c1a46-6d30-447b-a277-774ea23125ca)
